@@ -44,8 +44,8 @@ class DataRes(Resource):
                 'start_date': None,
                 'end_date': None,
                 'product_type': None,
-                'batch_size': 100,
-                'nominal_weight': 100
+                # 'batch_size': 100,
+                # 'nominal_weight': 100
             }
 
             opt = payload['options']
@@ -57,10 +57,10 @@ class DataRes(Resource):
                     options['end_date'] = opt['end_date']
             if 'product_type' in opt:
                 options['product_type'] = opt['product_type']
-            if 'batch_size' in opt:
-                options['batch_size'] = opt['batch_size']
-            if 'nominal_weight' in opt:
-                options['nominal_weight'] = opt['nominal_weight']
+            # if 'batch_size' in opt:
+            #     options['batch_size'] = opt['batch_size']
+            # if 'nominal_weight' in opt:
+            #     options['nominal_weight'] = opt['nominal_weight']
 
             # store file to upload directory
             data_id = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]

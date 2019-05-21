@@ -6,6 +6,7 @@ specs/
 *.pdf
 *.docx
 *.pyc
+*.env
 .env
 
 __pycache___

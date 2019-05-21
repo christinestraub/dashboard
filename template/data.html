@@ -104,13 +104,13 @@
             <!-- /.box-body -->
 
             <div class="box-footer clearfix">
-              <button class="btn btn-primary" id="select-all-button">
+              <button class="btn btn-primary" id="select-all-button" onclick="$.App.onSelectAll(this)">
                 Select All
               </button>
-              <button class="btn btn-primary" id="deselect-all-button">
+              <button class="btn btn-primary" id="deselect-all-button" onclick="$.App.onDeselectAll(this)">
                 Deselect All
               </button>
-              <button class="btn btn-primary pull-right" id="submit-button">
+              <button class="btn btn-primary pull-right" id="submit-button" onclick="$.App.onSubmit(this)">
                 Submit
               </button>
             </div>

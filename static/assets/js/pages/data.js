@@ -36,11 +36,61 @@
       if (err) {
 
       } else {
+        const data = res.map(item => {
+          item.unshift('')
+          return item
+        })
         $.App.table.clear();
-        $.App.table.rows.add(res);
+        $.App.table.rows.add(data);
         $.App.table.draw();
       }
     })
+  }
+
+  App.prototype.submitData = function(filename, data, options) {
+    if (data.length) {
+      const aaa = []
+      for (let i = 0; i < data.length; i++) {
+        aaa.push(data[i]);
+      };
+      const payload = {
+        filename,
+        data: aaa,
+        options
+      }
+      // console.log(payload)
+      loumidisAPI.data.submit(payload, function(err, res) {
+        if (err) {
+          // show error modal
+        } else {
+          const id = res.id
+          window.location = `/result/${id}`;
+        }
+      })
+    }
+  }
+
+  App.prototype.onSelectAll = function(e) {
+    this.table.rows().select()
+  }
+
+  App.prototype.onDeselectAll = function(e) {
+    this.table.rows().deselect()
+  }
+
+  App.prototype.onSubmit = function(e) {
+    const _this = $.App
+    const rows = _this.table.rows({selected: true}).data();
+    const data = rows.map(row => {
+      row.shift()
+      return row
+    })
+    const options = {
+      'start_date': _this.startDate,
+      'end_date': _this.endDate,
+      'product_type': _this.productType,
+    }
+    _this.submitData('database', data, options)
   }
 
   App.prototype.onDocReady = function(e) {

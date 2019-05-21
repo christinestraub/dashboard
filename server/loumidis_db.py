@@ -35,7 +35,6 @@ def select_data(connection, sql):
             # Converting data into list
             for row in result:
                 records.append([
-                    '',
                     row['id'],
                     str(row['mcgs_time']),
                     row['mcgs_timems'],

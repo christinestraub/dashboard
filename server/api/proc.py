@@ -429,34 +429,51 @@ def step_4(df, df1, my_list, batch_size, nominal_weight):
 
 
 def test_data(file_path, file_name, options, prefix):
-    start_date = options['start_date']
-    end_date = options['end_date']
-    product_type = options['product_type']
-    batch_size = options['product_type']
-    nominal_weight = options['nominal_weight']
-
-    df = read_data(file_name)
-    step_1_output = step_1(df, start_date, end_date, product_type)
-
-    step_2_output = step_2(df)
-
-    df1, my_list, step_3_output, image_list = step_3(df, file_path, prefix)
-
-
-    # step_4(df, df1, my_list, batch_size, nominal_weight)
-
-    return {
+    result = {
         'step_1': {
-            'output': step_1_output.splitlines(),
+            'output': [],
         },
         'step_2': {
-            'output': step_2_output.splitlines(),
-            'images': image_list
+            'output': [],
+            'images': []
         },
         'step_3': {
-            'output': step_3_output.splitlines(),
-        }
+            'output': [],
+        },
+        'step_4': {
+            'output': [],
+        },
+        'errors': {
+            'output': [],
+        },
     }
+    try:
+        start_date = options['start_date']
+        end_date = options['end_date']
+        product_type = options['product_type']
+        # batch_size = options['product_type']
+        # nominal_weight = options['nominal_weight']
+
+        df = read_data(file_name)
+        step_1_output = step_1(df, start_date, end_date, product_type)
+
+        result['step_1']['output'] = step_1_output.splitlines()
+
+        step_2_output = step_2(df)
+        result['step_2']['output'] = step_2_output.splitlines()
+
+        df1, my_list, step_3_output, images = step_3(df, file_path, prefix)
+
+        result['step_3']['output'] = step_3_output.splitlines()
+        result['step_3']['images'] = images
+
+        # step_4(df, df1, my_list, batch_size, nominal_weight)
+
+    except Exception as e:
+        result['errors'] = ['{}'.format(e)]
+
+    return result
+
 
 if __name__ == '__main__':
     batch_size = int(input("Please enter the batch size: "))
