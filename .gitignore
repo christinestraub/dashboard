@@ -1,0 +1,11 @@
+venv/
+.idea/
+specs/
+
+*.csv
+*.pdf
+*.docx
+*.pyc
+.env
+
+__pycache___

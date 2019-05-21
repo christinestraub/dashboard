@@ -1,0 +1,165 @@
+{% extends 'base-top-nav.html' %}
+{% block page_css %}
+{% endblock %}
+{% block content %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Upload File
+    <small>Example 2.0</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="#">Layout</a></li>
+    <li class="active">Top Navigation</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="box box-default">
+    <div class="box-header">
+      <h3 class="box-title">My Data Table</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table id="example2" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>MCGS Time</th>
+          <th>MCGS Time(ms)</th>
+          <th>Weight(g)</th>
+          <th>Product Name</th>
+          <th>Product Type</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <th>MCGS Time</th>
+          <th>MCGS Time(ms)</th>
+          <th>Weight(g)</th>
+          <th>Product Name</th>
+          <th>Product Type</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-body">
+      <!-- form start -->
+      <form role="form" method="post" action="/upload" enctype="multipart/form-data">
+        <div class="box-body">
+          <div class="form-group">
+            <input type="file" id="upload" name="file">
+            <p class="help-block">Example block-level help text here.</p>
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">
+            Upload
+          </button>
+          <button class="btn btn-primary" id="options-button">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+  <div class="modal fade" id="modal-options">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Options</h4>
+        </div>
+        <div class="modal-body">
+          <!-- Start Date -->
+          <div class="form-group">
+            <label>Start Date:</label>
+
+            <div class="input-group date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control pull-right" id="start-date-picker">
+            </div>
+            <!-- /.input group -->
+          </div>
+          <!-- /.form group -->
+
+          <!-- End Date -->
+          <div class="form-group">
+            <label>End Date:</label>
+
+            <div class="input-group date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control pull-right" id="end-date-picker">
+            </div>
+            <!-- /.input group -->
+          </div>
+          <!-- /.form group -->
+
+          <div class="form-group">
+            <label>Product Type</label>
+            <select class="form-control" id="product-type">
+              <option value="OVER">OVER</option>
+              <option value="RIGHT">RIGHT</option>
+              <option value="UNDER">UNDER</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="batch-size">Batch Size</label>
+            <input type="number" min="10" step="1000" class="form-control" id="batch-size"
+                   placeholder="Enter batch size" value="10">
+          </div>
+
+          <div class="form-group">
+            <label for="nominal-weight">Nominal Weight</label>
+            <input type="number" step="0.01" class="form-control" id="nominal-weight"
+                   placeholder="Nominal Weight" value="100">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="submit-button">Submit</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <div class="modal fade" id="modal-info">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Loumidis</h4>
+        </div>
+        <div class="modal-body">
+          Please open CSV file to submit
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+</section>
+<!-- /.content -->
+{% endblock %}
+{% block page_script %}
+<script src={{ url_for('static', filename='assets/js/pages/upload.js') }}></script>
+{% endblock %}
