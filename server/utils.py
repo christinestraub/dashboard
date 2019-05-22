@@ -7,7 +7,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def parse_csv(connection, filepath):
+def parse_csv(filepath):
     row_count = 0
     df = pandas.read_csv(filepath)
     print(len(df))
@@ -16,7 +16,7 @@ def parse_csv(connection, filepath):
         # print(index, row['MCGS_Time'], row['MCGS_TIMEMS'], row['Weight_g'])
         try:
             data = (row['MCGS_Time'], str(row['MCGS_TIMEMS']), str(row['Weight_g']), row['Product_name'], row['Product_type'])
-            insert_data(connection, data)
+            insert_data(data)
             row_count = row_count + 1
         except Exception as e:
             print(e)

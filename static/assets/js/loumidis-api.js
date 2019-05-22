@@ -55,10 +55,45 @@ const loumidisAPI = function ($) {
     },
   }
 
+  const product = {
+    list: function(field, callback) {
+      api.get(`/product/${field}`)
+        .then(function(res) {
+          callback(null, res.data);
+        })
+        .catch(function(err) {
+          callback(err);
+        });
+    },
+  }
+
+  const result = {
+    list: function (callback) {
+      api.get(`/result`)
+        .then(function(res) {
+          callback(null, res.data);
+        })
+        .catch(function(err) {
+          callback(err)
+        })
+    },
+    get: function (data_id, callback) {
+      api.get(`/result/${data_id}`)
+        .then(function(res) {
+          callback(null, res.data);
+        })
+        .catch(function(err) {
+          callback(err)
+        })
+    },
+  }
+
   //return an object that represents our new module
   return {
     data,
-    table
+    table,
+    product,
+    result
   }
 
 }(window.axios);

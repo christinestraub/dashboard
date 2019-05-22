@@ -1,15 +1,10 @@
-import os
-import csv
-import json
-from datetime import datetime
-
 from flask import request
 from flask_restful import Resource
 from server.loumidis_db import select_data
 
 class TableRes(Resource):
     def __init__(self, **kwargs):
-        self.connection = kwargs.get('connection')
+        pass
 
     def get(self):
         conditions = []
@@ -19,6 +14,9 @@ class TableRes(Resource):
         end_date = request.args.get('end_date')
         if start_date is not None and end_date != '':
             conditions.append("mcgs_time <= '{}'".format(end_date))
+        product_name = request.args.get('product_name')
+        if product_name is not None and product_name != '':
+            conditions.append("product_name = '{}'".format(product_name))
         product_type = request.args.get('product_type')
         if product_type is not None and product_type != '':
             conditions.append("product_type = '{}'".format(product_type))
@@ -31,6 +29,6 @@ class TableRes(Resource):
 
         print(sql)
 
-        records = select_data(self.connection, sql)
+        records = select_data(sql)
 
         return records

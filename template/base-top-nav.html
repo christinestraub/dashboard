@@ -51,10 +51,20 @@
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
+        {% set navigation_bar = [
+            ('/upload', 'upload', 'Upload'),
+            ('/data', 'data', 'Database'),
+            ('/result', 'result', 'Result')
+        ] -%}
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/upload">Upload File <span class="sr-only">(current)</span></a></li>
-            <li><a href="/data">Database</a></li>
+            {% for href, id, caption in navigation_bar %}
+            <li{% if id == page %} class="active"{% endif %}>
+              <a href="{{ href|e }}">{{ caption|e }}
+                {% if id == page %}<span class="sr-only">(current)</span>{% endif %}
+              </a>
+            </li>
+            {% endfor %}
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -237,6 +247,10 @@
 <script src={{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}></script>
 <!-- Bootstrap 3.3.7 -->
 <script src={{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}></script>
+<!-- ChartJS -->
+<script src={{ url_for('static', filename='bower_components/chart.js/Chart.js') }}></script>
+<!-- FastClick -->
+<script src={{ url_for('static', filename='bower_components/fastclick/lib/fastclick.js') }}></script>
 <!-- DataTables -->
 <script src={{ url_for('static', filename='bower_components/datatables.net/js/jquery.dataTables.min.js') }}></script>
 <script src={{ url_for('static', filename='bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}></script>

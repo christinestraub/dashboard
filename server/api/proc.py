@@ -26,87 +26,136 @@ def read_data(file_name):
 
 # STEP1
 def grouping(df, date_start=None, date_end=None, product=None):
-    with redirect_stdout(f):
-        df["MCGS_Time"] = pd.to_datetime(df["MCGS_Time"], format='%d%m%Y', errors='ignore')
-        if date_start is None and date_end is None:
-            df_to_show = df.loc[df['Product_name'] == product].sort_values(by=['MCGS_Time'])
-            print(product)
+    df["MCGS_Time"] = pd.to_datetime(df["MCGS_Time"], format='%d%m%Y', errors='ignore')
+    if date_start is None and date_end is None:
+        df_to_show = df.loc[df['Product_name'] == product].sort_values(by=['MCGS_Time'])
+        print('product: {}'.format(product))
+        print(df_to_show)
+    elif product is None:
+        if date_start is None:
+            df_to_show = df.loc[df['MCGS_Time'] <= date_end].sort_values(by=['MCGS_Time'])
+        elif date_end is None:
+            df_to_show = df.loc[df['MCGS_Time'] >= date_start].sort_values(by=['MCGS_Time'])
             print(df_to_show)
-        elif product is None:
-            if date_start is None:
-                df_to_show = df.loc[df['MCGS_Time'] <= date_end].sort_values(by=['MCGS_Time'])
-            elif date_end is None:
-                df_to_show = df.loc[df['MCGS_Time'] >= date_start].sort_values(by=['MCGS_Time'])
-                print(df_to_show)
-        else:
-            df_to_show = df.loc[df['Product_name'] == product].sort_values(by=['MCGS_Time'])
-            print(df_to_show)
-
-    return f.getvalue()
+    else:
+        df_to_show = df.loc[df['Product_name'] == product].sort_values(by=['MCGS_Time'])
+        print(df_to_show)
 
 def step_1(df, start_date, end_date, product_type):
-    return grouping(df, start_date, end_date, product_type)
+    grouping(df, start_date, end_date, product_type)
 
 # STEP2
 def step_2(df):
-    with redirect_stdout(f):
-        # Product_type = df["Product_type"].value_counts()
+    # Product_type = df["Product_type"].value_counts()
 
-        Product_type = {'UNDER': 0, 'OVER': 1, 'RIGHT': 2}
-        df.Product_type = [Product_type[item] for item in df.Product_type]
-        print(df)
+    product_type = {'UNDER': 0, 'OVER': 1, 'RIGHT': 2}
+    df.Product_type = [product_type[item] for item in df.Product_type]
+    # print(df)
 
-        print(df['Product_type'].value_counts(ascending=True))
+    res = df['Product_type'].value_counts(ascending=True)
+    value_counts_index = res.index.to_list()
+    value_counts_value = res.to_list()
+    # print(value_counts_asc)
 
-        print(df['Product_type'].value_counts(normalize=True))
+    res = df['Product_type'].value_counts(ascending=True, normalize=True)
+    value_counts_norm = res.to_list()
+    # print(value_counts_norm)
 
-        # print(df['Product_type'].describe())
+    value_counts = []
+    product_type_labels = ['UNDER', 'OVER', 'RIGHT']
+    for idx, val in enumerate(value_counts_index):
+        value_counts.append({
+            'product_type': product_type_labels[val],
+            'count': value_counts_value[idx],
+            'norm': value_counts_norm[idx],
+        })
+    # print(df['Product_type'].describe())
 
+    # print(df.groupby(['Product_name']).describe())
 
-        # print(df.groupby(['Product_name']).describe())
+    # print(df.loc[df['Product_type'] == 2])
 
+    # my_list_1=df.Product_name.unique()
 
+    res = df.groupby(['Product_name'])['Product_type'].value_counts()
+    value_counts_group_by_index = res.index.to_list()
+    value_counts_group_by_value = res.to_list()
+    # print(value_counts_group_by)
 
-        # print(df.loc[df['Product_type'] == 2])
+    res = df.groupby(['Product_name'])['Product_type'].value_counts(normalize=True)
+    value_counts_group_by_norm = res.to_list()
+    # print(value_counts_group_by_norm)
 
-        # my_list_1=df.Product_name.unique()
+    product_names = []
+    value_counts_group = []
+    for idx, val in enumerate(value_counts_group_by_index):
+        if val[0] not in product_names:
+            product_names.append(val[0])
+            row = {
+                'product_name': val[0],
+                'counts': []
+            }
+            row['counts'].append([
+                val[1],
+                value_counts_group_by_value[idx],
+                value_counts_group_by_norm[idx]]
+            )
+            value_counts_group.append(row)
+        else:
+            row['counts'].append([
+                val[1],
+                value_counts_group_by_value[idx],
+                value_counts_group_by_norm[idx]]
+            )
 
-        print(df.groupby(['Product_name'])['Product_type'].value_counts())
-        print(df.groupby(['Product_name'])['Product_type'].value_counts(normalize=True))
-        # print(df['Product_type'].Counter(item))
+    # print(df['Product_type'].Counter(item))
 
-    return f.getvalue()
+    return {
+        'value_counts': value_counts,
+        'value_counts_group': value_counts_group,
+    }
 
 # STEP3
 def step_3(df, file_path, prefix):
-    with redirect_stdout(f):
-        df1 = df.loc[df['Product_type'] == 2]
+    df1 = df.loc[df['Product_type'] == 2]
 
-        print(df1['Product_type'].value_counts(ascending=True))
+    res = df1['Product_type'].value_counts(ascending=True)
+    value_counts = res.to_list()
 
-        print(df1.groupby(['Product_name'])['Weight_g'].describe())
+    res = df1.groupby(['Product_name'])['Weight_g'].describe()
+    describe = {
+        'columns': res.columns.values.tolist(),
+        'index': res.index.values.tolist(),
+        'values': res.values.tolist()
+    }
 
-        # df2=df1.groupby(['Product_name']).size()
+    # df2=df1.groupby(['Product_name']).size()
 
-        my_list = df1.Product_name.unique()
-        image_list = []
+    my_list = df1.Product_name.unique()
+    image_list = []
 
-        for item in my_list:
-            h = sorted(df1.loc[df1['Product_name'] == item, 'Weight_g'])
-            fit = stats.norm.pdf(h, np.mean(h), np.std(h))
-            pl.plot(h, fit, '-o')
+    for item in my_list:
+        h = sorted(df1.loc[df1['Product_name'] == item, 'Weight_g'])
+        fit = stats.norm.pdf(h, np.mean(h), np.std(h))
+        pl.plot(h, fit, '-o')
 
-            pl.hist(h, normed=True)
-            plt.title(item)
-            # pl.show()
-            image_name = '{}_{}.png'.format(prefix, item)
-            file_name = os.path.join(file_path, image_name)
-            pl.savefig(file_name)
-            image_list.append(image_name)
+        pl.hist(h, normed=True)
+        plt.title(item)
+        # pl.show()
+        image_name = '{}_{}.png'.format(prefix, item)
+        file_name = os.path.join(file_path, image_name)
+        pl.savefig(file_name)
+        image_list.append(image_name)
 
-        # df1.hist(by=df1['Product_name'])
+    # df1.hist(by=df1['Product_name'])
 
-    return df1, my_list, f.getvalue(), image_list
+    result = {
+        'value_counts': value_counts,
+        'describe': describe,
+        'images': image_list
+    }
+
+    return df1, my_list, result
 
 # STEP4
 def step_4(df, df1, my_list, batch_size, nominal_weight):
@@ -430,44 +479,34 @@ def step_4(df, df1, my_list, batch_size, nominal_weight):
 
 def test_data(file_path, file_name, options, prefix):
     result = {
-        'step_1': {
-            'output': [],
-        },
-        'step_2': {
-            'output': [],
-            'images': []
-        },
-        'step_3': {
-            'output': [],
-        },
-        'step_4': {
-            'output': [],
-        },
-        'errors': {
-            'output': [],
-        },
+        'output': [],
+        'images': [],
+        'errors': [],
     }
     try:
-        start_date = options['start_date']
-        end_date = options['end_date']
-        product_type = options['product_type']
-        # batch_size = options['product_type']
-        # nominal_weight = options['nominal_weight']
+        with redirect_stdout(f):
+            start_date = options['start_date']
+            end_date = options['end_date']
+            product_type = options['product_type']
+            # batch_size = options['product_type']
+            # nominal_weight = options['nominal_weight']
 
-        df = read_data(file_name)
-        step_1_output = step_1(df, start_date, end_date, product_type)
+            df = read_data(file_name)
 
-        result['step_1']['output'] = step_1_output.splitlines()
+            step_1(df, start_date, end_date, product_type)
 
-        step_2_output = step_2(df)
-        result['step_2']['output'] = step_2_output.splitlines()
+            result['step_2'] = step_2(df)
 
-        df1, my_list, step_3_output, images = step_3(df, file_path, prefix)
+            df1, my_list, result_step_3 = step_3(df, file_path, prefix)
 
-        result['step_3']['output'] = step_3_output.splitlines()
-        result['step_3']['images'] = images
+            result['step_3'] = result_step_3
 
-        # step_4(df, df1, my_list, batch_size, nominal_weight)
+            # step_4(df, df1, my_list, batch_size, nominal_weight)
+
+        # print(f.getvalue())
+
+        # result['output'] = f.getvalue().splitlines()
+
 
     except Exception as e:
         result['errors'] = ['{}'.format(e)]

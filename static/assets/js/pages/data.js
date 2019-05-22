@@ -23,26 +23,76 @@
     this.startDate = moment().format('YYYY-MM-DD')
     this.endDate =moment().format('YYYY-MM-DD')
     this.prodcutType = ''
+    this.prodcutName = ''
+
+    //
+    this.getProductNames()
   };
+
+  App.prototype.getProductNames = function () {
+    loumidisAPI.product.list('name', function(err, res) {
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      res.map(name =>
+        $('#product-name')
+          .append($(`<option value="${name}">${name}</option>`))
+      )
+    })
+  }
+
+  App.prototype.getProductTypes = function () {
+    loumidisAPI.product.list('type', function(err, res) {
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      res.map(type =>
+        $('#product-type')
+          .append($(`<option value="${type}">${type}</option>`))
+      )
+    })
+  }
 
   App.prototype.getRecords = function () {
     const params = {
       start_date: moment(this.startDate).format('YYYY-MM-DD'),
       end_date: moment(this.endDate).format('YYYY-MM-DD'),
       product_type: this.productType,
+      product_name: this.productName,
     }
 
     loumidisAPI.table.list(params, function(err, res) {
       if (err) {
+        console.log(err)
+        return
+      }
 
-      } else {
+      if (res.length) {
+        const productNames = []
         const data = res.map(item => {
+          if (productNames.indexOf(item[4]) === -1) {
+            productNames.push(item[4])
+          }
           item.unshift('')
           return item
         })
+
+        // redraw table
         $.App.table.clear();
         $.App.table.rows.add(data);
         $.App.table.draw();
+
+        // update product name
+        $('#product-name').empty()
+        $('#product-name').append($(`<option value="ALL</option>`))
+        productNames.map(name =>
+          $('#product-name')
+            .append($(`<option value="${name}">${name}</option>`))
+        )
       }
     })
   }
@@ -71,7 +121,14 @@
   }
 
   App.prototype.onSelectAll = function(e) {
-    this.table.rows().select()
+    const filter = {search: 'applied'}
+    // if search is applied we will select these rows
+    const count = this.table.rows(filter).data().length
+    if (count > 0) {
+      this.table.rows(filter).select()
+    } else {
+      this.table.rows().select()
+    }
   }
 
   App.prototype.onDeselectAll = function(e) {
@@ -82,15 +139,17 @@
     const _this = $.App
     const rows = _this.table.rows({selected: true}).data();
     const data = rows.map(row => {
-      row.shift()
+      row.shift() // remove blank cell
+      row.shift() // remove id
       return row
     })
     const options = {
       'start_date': _this.startDate,
       'end_date': _this.endDate,
       'product_type': _this.productType,
+      'product_name': _this.productName,
     }
-    _this.submitData('database', data, options)
+    _this.submitData('database.csv', data, options)
   }
 
   App.prototype.onDocReady = function(e) {
@@ -119,9 +178,15 @@
     $('#start-date-picker').val($.App.startDate)
     $('#end-date-picker').val($.App.endDate)
 
-    //
+    // Product Type
     $('#product-type').change(function () {
       $.App.productType = $("#product-type option:selected").val()
+      $.App.getRecords()
+    })
+
+    // Product Name
+    $('#product-name').change(function () {
+      $.App.productName = $("#product-name option:selected").val()
       $.App.getRecords()
     })
 
