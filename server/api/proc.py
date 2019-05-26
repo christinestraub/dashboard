@@ -512,25 +512,3 @@ def test_data(file_path, file_name, options, prefix):
         result['errors'] = ['{}'.format(e)]
 
     return result
-
-
-if __name__ == '__main__':
-    batch_size = int(input("Please enter the batch size: "))
-    nominal_weight = int(input("Please enter the nominal weight: "))
-
-    options = {
-        'start_date': '2019-04-15',
-        'end_date': None,
-        'product_type': None,
-        'batch_size': batch_size,
-        'nominal_weight': nominal_weight
-    }
-    prefix = '2019_05_21_06_18_11_951_20190415'
-    result = test_data(
-        file_path=r'D:\c\f\dmitro\upload',
-        file_name=r'D:\c\f\dmitro\upload\2019_05_21_06_18_11_951_20190415-20190430.csv',
-        options=options,
-        prefix=prefix
-    )
-
-    print(result)

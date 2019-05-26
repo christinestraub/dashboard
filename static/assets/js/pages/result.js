@@ -28,6 +28,9 @@
             )
             $('#result-images').html(html.join('<br/>'))
           }
+          if (res.step3.describe) {
+            _this.renderStep3Describe(res.step3.describe)
+          }
         }
       }
     })
@@ -79,6 +82,25 @@
             </tr>`
           $('#table-step2-group-by > tbody:last-child').append(html)
       })
+    })
+  }
+
+  App.prototype.renderStep3Describe = function(data) {
+    data.index.map(item => {
+      const html = `
+        <tr>
+          <td>${item}</td>
+          <td>${labels[count[0]]}</td>
+          <td>${count[1]}</td>
+          <td>
+            <div class="progress progress-xs">
+              <div class="progress-bar progress-bar-red" style="width: ${per}%">
+              </div>
+            </div>
+          </td>
+          <td><span class="badge bg-red" id="step2-33">${per}%</span></td>
+        </tr>`
+        $('#table-step2-group-by > tbody:last-child').append(html)
     })
   }
 

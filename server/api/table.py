@@ -1,8 +1,12 @@
+"""This module is API endporints for /api/table"""
+
 from flask import request
 from flask_restful import Resource
 from server.loumidis_db import select_data
 
 class TableRes(Resource):
+    """This class handles a request of /api/table endpoint"""
+
     def __init__(self, **kwargs):
         pass
 

@@ -23,6 +23,11 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href={{ url_for('static', filename='dist/css/skins/_all-skins.min.css') }}>
+  <!-- Pace style -->
+  <link rel="stylesheet" href={{ url_for('static', filename='plugins/pace/pace.min.css') }}>
+
+  <!-- Loumidis style -->
+  <link rel="stylesheet" href={{ url_for('static', filename='assets/css/loumidis.css') }}>
   {% block page_css %}{% endblock %}
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -52,7 +57,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         {% set navigation_bar = [
-            ('/upload', 'upload', 'Upload'),
+            ('/upload', 'upload', 'Upload', ),
             ('/data', 'data', 'Database'),
             ('/result', 'result', 'Result')
         ] -%}
@@ -247,6 +252,8 @@
 <script src={{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}></script>
 <!-- Bootstrap 3.3.7 -->
 <script src={{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}></script>
+<!-- PACE -->
+<script src={{ url_for('static', filename='bower_components/PACE/pace.min.js') }}></script>
 <!-- ChartJS -->
 <script src={{ url_for('static', filename='bower_components/chart.js/Chart.js') }}></script>
 <!-- FastClick -->
@@ -271,6 +278,8 @@
 <script src={{ url_for('static', filename='bower_components/moment/moment.js') }}></script>
 <!-- AdminLTE App -->
 <script src={{ url_for('static', filename='dist/js/adminlte.min.js') }}></script>
+<!-- Loumidis Common -->
+<script src={{ url_for('static', filename='assets/js/loumidis.js') }}></script>
 <!-- Loumidis API -->
 <script src={{ url_for('static', filename='assets/js/loumidis-api.js') }}></script>
 {% block page_script %}{% endblock %}

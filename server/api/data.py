@@ -1,3 +1,4 @@
+"""This module is endpoint for /api/data"""
 import os
 import csv
 import json
@@ -6,16 +7,21 @@ from datetime import datetime
 from flask import request
 from flask_restful import Resource
 
-from .proc import test_data
 from server.loumidis_db import insert_result
+from server.api.proc import test_data
 
-columns = ('MCGS_Time', 'MCGS_TIMEMS', 'Weight_g', 'Product_name', 'Product_type')
+COLUMNS = ('MCGS_Time', 'MCGS_TIMEMS', 'Weight_g', 'Product_name', 'Product_type')
+
 
 class DataRes(Resource):
+    """This class handles a request for /api/data endpoint"""
+
     def __init__(self, **kwargs):
         self.upload_folder = kwargs.get('upload_folder')
 
     def get(self, data_id):
+        """This function handles GET method"""
+
         try:
             file_name = '{}_database.csv'.format(data_id)
             file_path = os.path.join(self.upload_folder, file_name)
@@ -32,6 +38,8 @@ class DataRes(Resource):
             return '{}'.format(e), 400
 
     def post(self, data_id):
+        """This method handles POST /api/data"""
+
         try:
             payload = request.json
             filename = ''
@@ -81,7 +89,7 @@ class DataRes(Resource):
 
             with open(file_path, 'w', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
-                csv_writer.writerow(columns)
+                csv_writer.writerow(COLUMNS)
                 for row in payload['data']:
                     csv_writer.writerow(row)
 
@@ -98,7 +106,7 @@ class DataRes(Resource):
 
             insert_result(data_id)
 
-            return { 'id': data_id }
+            return {'id': data_id}
 
         except Exception as e:
             return '{}'.format(e), 400

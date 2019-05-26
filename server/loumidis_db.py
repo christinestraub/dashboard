@@ -1,9 +1,10 @@
 import os
+import dotenv
 import pymysql.cursors
 from datetime import datetime
 
 DB_HOST = os.environ.get('DB_HOST', default='localhost')
-DB_USER = os.environ.get('DB_USER', default='root')
+DB_USER = os.environ.get('DB_USER', default='')
 DB_PASS = os.environ.get('DB_PASS', default='')
 DB_NAME = os.environ.get('DB_NAME', default='loumidis')
 
@@ -17,6 +18,7 @@ def connect_db(host=DB_HOST, user=DB_USER, password=DB_PASS, db=DB_NAME):
         cursorclass=pymysql.cursors.DictCursor
     )
     return connection
+
 
 def insert_data(data):
     connection = connect_db()
@@ -33,6 +35,7 @@ def insert_data(data):
         print('{}'.format(e))
     finally:
         connection.close()
+
 
 def select_result():
     connection = connect_db()
@@ -76,7 +79,6 @@ def insert_result(data_id):
         print('{}'.format(e))
     finally:
         connection.close()
-
 
 
 def update_result(data_id):
@@ -140,6 +142,7 @@ def select_data(sql):
 
     return records
 
+
 def select_product_name():
     connection = connect_db()
     sql = 'SELECT product_name FROM tbl_data GROUP BY product_name ORDER BY product_name ASC;'
@@ -159,6 +162,7 @@ def select_product_name():
         connection.close()
 
     return records
+
 
 def select_product_type():
     connection = connect_db()

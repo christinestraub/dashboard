@@ -24,8 +24,9 @@
         data: aaa,
         options
       }
-      // console.log(payload)
+      $('.loader').show()
       loumidisAPI.data.submit(payload, function(err, res) {
+        $('.loader').hide()
         if (err) {
           // show error modal
         } else {
@@ -68,16 +69,26 @@
         const file = this.files[0];
         const config = {
           complete: function (results, file) {
+            $('.loader').hide()
+
+            if (results.errors.length) {
+              // handle error
+            }
+
             if (results.data[results.data.length - 1].length < 5) {
               results.data.pop();
             }
+
             results.data.shift();
+
             $.App.table.clear();
             $.App.table.rows.add(results.data);
             $.App.table.draw();
             $.App.file = file
           }
         };
+
+        $('.loader').show()
 
         Papa.parse(file, config);
       }

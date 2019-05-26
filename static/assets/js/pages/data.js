@@ -74,9 +74,9 @@
       if (res.length) {
         const productNames = []
         const data = res.map(item => {
-          if (productNames.indexOf(item[4]) === -1) {
-            productNames.push(item[4])
-          }
+          // if (productNames.indexOf(item[4]) === -1) {
+          //   productNames.push(item[4])
+          // }
           item.unshift('')
           return item
         })
@@ -87,12 +87,12 @@
         $.App.table.draw();
 
         // update product name
-        $('#product-name').empty()
-        $('#product-name').append($(`<option value="ALL</option>`))
-        productNames.map(name =>
-          $('#product-name')
-            .append($(`<option value="${name}">${name}</option>`))
-        )
+        // $('#product-name').empty()
+        // $('#product-name').append($(`<option value="ALL</option>`))
+        // productNames.map(name =>
+        //   $('#product-name')
+        //     .append($(`<option value="${name}">${name}</option>`))
+        // )
       }
     })
   }
