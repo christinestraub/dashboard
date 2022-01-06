@@ -3,7 +3,7 @@ aniso8601==6.0.0
 astroid==2.2.5
 Babel==2.6.0
 billiard==3.6.0.0
-celery==4.3.0
+celery==5.2.2
 Click==7.0
 colorama==0.4.1
 cycler==0.10.0
